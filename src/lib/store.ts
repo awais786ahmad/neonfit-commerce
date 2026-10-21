@@ -8,7 +8,7 @@ import type { CartItem, NeonDesign, Order } from "./neon/types";
 
 type Listener = () => void;
 
-function createStore<T>(key: string, fallback: T) {
+export function createStore<T>(key: string, fallback: T) {
   let snapshot: T | null = null;
   const listeners = new Set<Listener>();
 
@@ -93,7 +93,13 @@ export function useOrders(): Order[] {
 }
 
 export function placeOrder(order: Order) {
-  orderStore.write([order, ...orderStore.read()]);
+  // normalize admin-managed fields so the admin panel always has a state to act on
+  const normalized: Order = {
+    ...order,
+    paymentStatus: order.paymentStatus ?? "unpaid",
+    artwork: order.artwork ?? "pending",
+  };
+  orderStore.write([normalized, ...orderStore.read()]);
 }
 
 export function getOrder(id: string): Order | undefined {

@@ -65,6 +65,9 @@ export interface OrderCustomer {
   paymentMethod: string;
 }
 
+export type PaymentStatus = "unpaid" | "paid" | "refunded";
+export type ArtworkStatus = "pending" | "approved" | "changes_requested";
+
 export interface Order {
   id: string;
   items: CartItem[];
@@ -77,4 +80,12 @@ export interface Order {
   status: string;
   placedAt: number;
   events: OrderEvent[];
+  /** admin-managed payment state (defaults to "unpaid" for new orders) */
+  paymentStatus?: PaymentStatus;
+  /** admin-managed artwork approval state */
+  artwork?: ArtworkStatus;
+  /** courier tracking number once shipped */
+  tracking?: string;
+  /** internal notes from the admin team */
+  adminNotes?: string;
 }
