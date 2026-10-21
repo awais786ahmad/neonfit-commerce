@@ -1,4 +1,13 @@
 import type { DesignElement, NeonDesign } from "./types";
+import {
+  lookupAccessory,
+  lookupBackboard,
+  lookupBackingColor,
+  lookupColor,
+  lookupFont,
+  lookupShape,
+  lookupTier,
+} from "../admin";
 
 /* ---------------- Neon colors ---------------- */
 
@@ -21,9 +30,11 @@ export const NEON_COLORS: NeonColor[] = [
   { id: "warmwhite", name: "Warm White", hex: "#fff3d6", surcharge: 0 },
 ];
 
-export function getColor(id: string): NeonColor {
-  return NEON_COLORS.find((c) => c.id === id) ?? NEON_COLORS[0]!;
+/** Lookups consult the admin-managed catalog first (enabled entries only),
+ * falling back to the built-in defaults above. */
 
+export function getColor(id: string): NeonColor {
+  return lookupColor(id) ?? NEON_COLORS[0]!;
 }
 
 /** Core (tube center) color — mixed toward white like a lit LED tube. */
@@ -60,8 +71,7 @@ export const NEON_FONTS: NeonFont[] = [
 ];
 
 export function getFont(id: string): NeonFont {
-  return NEON_FONTS.find((f) => f.id === id) ?? NEON_FONTS[0]!;
-
+  return lookupFont(id) ?? NEON_FONTS[0]!;
 }
 
 /* ---------------- Shapes ---------------- */
@@ -165,8 +175,7 @@ export const NEON_SHAPES: NeonShape[] = [
 ];
 
 export function getShape(id: string): NeonShape {
-  return NEON_SHAPES.find((s) => s.id === id) ?? NEON_SHAPES[0]!;
-
+  return lookupShape(id) ?? NEON_SHAPES[0]!;
 }
 
 /* ---------------- Size tiers ---------------- */
@@ -188,8 +197,7 @@ export const SIZE_TIERS: SizeTier[] = [
 ];
 
 export function getTier(id: string): SizeTier {
-  return SIZE_TIERS.find((t) => t.id === id) ?? SIZE_TIERS[1]!;
-
+  return lookupTier(id) ?? SIZE_TIERS[1]!;
 }
 
 /* ---------------- Backboards ---------------- */
@@ -211,8 +219,7 @@ export const BACKBOARDS: Backboard[] = [
 ];
 
 export function getBackboard(id: string): Backboard {
-  return BACKBOARDS.find((b) => b.id === id) ?? BACKBOARDS[0]!;
-
+  return lookupBackboard(id) ?? BACKBOARDS[0]!;
 }
 
 export interface BackingColor {
@@ -230,8 +237,7 @@ export const BACKING_COLORS: BackingColor[] = [
 ];
 
 export function getBackingColor(id: string): BackingColor {
-  return BACKING_COLORS.find((c) => c.id === id) ?? BACKING_COLORS[0]!;
-
+  return lookupBackingColor(id) ?? BACKING_COLORS[0]!;
 }
 
 /* ---------------- Accessories ---------------- */
@@ -250,7 +256,7 @@ export const ACCESSORIES: Accessory[] = [
 ];
 
 export function getAccessory(id: string): Accessory | undefined {
-  return ACCESSORIES.find((a) => a.id === id);
+  return lookupAccessory(id);
 }
 
 /* ---------------- Scenes ---------------- */
